@@ -1,0 +1,498 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Racing+Sans+One&display=swap');
+
+
+:root {
+  --background: #121212;
+  --panel: #1e1e1e;
+  --card: #262626;
+  --card-light: #303030;
+
+  --accent: #c96b2c;
+  --accent-hover: #df7d3b;
+
+  --text: #ffffff;
+  --muted: #aaaaaa;
+
+  --border: #3a3a3a;
+}
+
+
+/* =========================
+   BASE
+========================= */
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  font-family: 'Inter', sans-serif;
+  background: var(--background);
+}
+
+
+/* =========================
+   APP
+========================= */
+
+.app {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar-container {
+  width: 340px;
+  padding: 24px;
+  box-sizing: border-box;
+
+  background:
+    linear-gradient(
+      180deg,
+      #202020,
+      #111111
+    );
+
+  color: var(--text);
+
+  overflow-y: auto;
+  z-index: 4000;
+}
+
+
+.sidebar h1 {
+  margin: 0;
+
+  font-family: 'Racing Sans One', cursive;
+  font-size: 34px;
+  letter-spacing: 1px;
+
+  color: var(--accent);
+}
+
+
+.sidebar h2 {
+  margin-top: 5px;
+  margin-bottom: 25px;
+
+  font-size: 15px;
+  font-weight: 500;
+
+  color: var(--muted);
+
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Font Awesome heading icons */
+
+.title-icon {
+
+  vertical-align: -0.15em;
+
+  margin-right: 6px;
+
+}
+
+
+.sidebar input {
+  width: 100%;
+  padding: 12px;
+
+  box-sizing: border-box;
+
+  background: var(--card);
+  color: white;
+
+  border: 1px solid var(--border);
+  border-radius: 10px;
+
+  font-size: 14px;
+}
+
+
+.sidebar input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.next-stop,
+.progress-panel,
+.venue-card {
+
+  background: var(--card);
+
+  padding: 18px;
+  margin-top: 20px;
+
+  border-radius: 14px;
+
+  border: 1px solid var(--border);
+
+  box-shadow:
+    0 8px 20px rgba(0,0,0,.25);
+}
+
+
+.next-stop h3,
+.progress-panel h3,
+.progress-panel h4,
+.venue-card h3 {
+
+  margin-top: 0;
+  color: var(--accent);
+}
+
+
+.venue-card p,
+.next-stop p {
+
+  margin: 8px 0;
+  color: var(--muted);
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+button {
+
+  width: 100%;
+
+  padding: 12px;
+  margin-top: 12px;
+
+  background: var(--accent);
+
+  color: white;
+
+  border: none;
+  border-radius: 10px;
+
+  font-weight: 600;
+  font-size: 14px;
+
+  cursor: pointer;
+
+  transition:
+    background .2s ease,
+    transform .2s ease;
+}
+
+
+button:hover {
+
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+
+.card-button {
+
+  width: auto;
+  min-width: 120px;
+
+  padding: 10px;
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+.progress-bar {
+
+  width: 100%;
+  height: 14px;
+
+  background: #111;
+
+  border-radius: 10px;
+
+  overflow: hidden;
+}
+
+
+.progress-bar.small {
+
+  height: 8px;
+}
+
+
+.progress-fill {
+
+  height: 100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      #c96b2c,
+      #e39a55
+    );
+
+  transition: .4s ease;
+}
+
+
+.progress-fill.region {
+
+  background:
+    linear-gradient(
+      90deg,
+      #4caf50,
+      #8bc34a
+    );
+}
+
+
+.region-progress {
+
+  margin-bottom: 15px;
+
+  padding: 8px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+}
+
+
+.region-progress:hover {
+
+  background: var(--card-light);
+}
+
+
+.region-progress.active {
+
+  background:
+    rgba(201,107,44,.2);
+
+  border: 1px solid var(--accent);
+}
+
+
+/* =========================
+   MAP
+========================= */
+
+.map-container {
+
+  flex: 1;
+}
+
+
+.leaflet-container {
+
+  height: 100%;
+  width: 100%;
+}
+
+
+.leaflet-control-container {
+
+  z-index: 1000;
+}
+
+
+/* =========================
+   LEAFLET POPUPS
+========================= */
+
+.leaflet-popup-content-wrapper {
+
+  background: #262626 !important;
+
+  color: white !important;
+
+  border-radius: 14px !important;
+
+  border: 1px solid #3a3a3a !important;
+
+  box-shadow:
+    0 8px 25px rgba(0,0,0,.45) !important;
+}
+
+
+.leaflet-popup-content {
+
+  margin: 0 !important;
+
+  width: 300px !important;
+}
+
+
+.leaflet-popup-tip {
+
+  background: #262626 !important;
+}
+
+
+.leaflet-popup-close-button {
+
+  color: #aaa !important;
+}
+
+
+.leaflet-popup-close-button:hover {
+
+  color: var(--accent) !important;
+}
+
+
+/* =========================
+   MOBILE CONTROLS
+========================= */
+
+.mobile-drawer-toggle {
+
+  display: none;
+}
+
+
+/* =========================
+   MOBILE DRAWER
+========================= */
+
+@media(max-width:700px) {
+
+
+  .app {
+
+    position: relative;
+
+  }
+
+
+  /* Hamburger */
+
+  .mobile-drawer-toggle {
+
+    display: block;
+
+    position: absolute;
+
+    top: 20px;
+    right: 20px;
+
+    z-index: 5000;
+
+    width: 52px;
+    height: 52px;
+
+    border-radius: 50%;
+
+    padding: 0;
+
+    font-size: 24px;
+
+  }
+
+
+  .mobile-drawer-toggle.open {
+
+    background: var(--card);
+
+    color: var(--accent);
+
+  }
+
+
+  /* Overlay */
+
+  .drawer-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    background: rgba(0,0,0,.45);
+
+    z-index: 3000;
+
+  }
+
+
+  /* Drawer */
+
+  .sidebar-container {
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    height: 100dvh;
+
+    width: min(85vw,340px);
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    z-index: 4000;
+
+    transform: translateX(-110%);
+
+    transition:
+      transform .25s ease;
+
+    overflow: hidden;
+
+    box-shadow:
+      8px 0 25px rgba(0,0,0,.5);
+
+  }
+
+
+  .sidebar-container.mobile-panel-open {
+
+    transform: translateX(0);
+
+  }
+
+
+  .sidebar-content {
+
+    height: 100%;
+
+    overflow-y: auto;
+
+    padding-bottom: 40px;
+
+  }
+
+
+  /* Map */
+
+  .map-container {
+
+    position: absolute;
+
+    inset: 0;
+
+  }
+
+
+  /* Touch */
+
+  button {
+
+    min-height: 44px;
+
+    font-size: 16px;
+
+  }
+
+}
