@@ -2,6 +2,7 @@ import MapView from "./components/MapView";
 import Sidebar from "./components/Sidebar";
 import NextStop from "./components/NextStop";
 import Progress from "./components/Progress";
+import AllVenues from "./components/AllVenues";
 import { useVenues } from "./hooks/useVenues";
 import { useState } from "react";
 import { useVisited } from "./hooks/useVisited";
@@ -29,6 +30,9 @@ function App() {
 
   const [nextStop, setNextStop] =
     useState<Venue | null>(null);
+
+  const [allVenuesOpen, setAllVenuesOpen] =
+    useState(false);
 
 
   const [resetMap, setResetMap] =
@@ -70,31 +74,31 @@ function App() {
     <div className="app">
 
 
-		<button
-		  className={`mobile-drawer-toggle ${
-			mobilePanelOpen ? "open" : ""
-		  }`}
-		  type="button"
-		  onClick={() =>
-			setMobilePanelOpen(previous => !previous)
-		  }
-		>
-		  {
-			mobilePanelOpen
-			  ? "✕"
-			  : "☰"
-		  }
-		</button>
+      <button
+        className={`mobile-drawer-toggle ${
+          mobilePanelOpen ? "open" : ""
+        }`}
+        type="button"
+        onClick={() =>
+          setMobilePanelOpen(previous => !previous)
+        }
+      >
+        {
+          mobilePanelOpen
+            ? "✕"
+            : "☰"
+        }
+      </button>
 
 
-		{
-		  mobilePanelOpen && (
-			<div
-			  className="drawer-overlay"
-			  onClick={() => setMobilePanelOpen(false)}
-			/>
-		  )
-		}
+      {
+        mobilePanelOpen && (
+          <div
+            className="drawer-overlay"
+            onClick={() => setMobilePanelOpen(false)}
+          />
+        )
+      }
 
 
 
@@ -115,8 +119,10 @@ function App() {
           <Sidebar
             search={search}
             setSearch={setSearch}
+            onOpenAllVenues={() =>
+              setAllVenuesOpen(true)
+            }
           />
-
 
 
           <Progress
@@ -128,7 +134,6 @@ function App() {
               setMobilePanelOpen(false)
             }
           />
-
 
 
           <NextStop
@@ -179,6 +184,17 @@ function App() {
 
         resetMap={resetMap}
 
+      />
+
+
+      <AllVenues
+        venues={venues}
+        visited={visited}
+        toggleVisited={toggleVisited}
+        isOpen={allVenuesOpen}
+        onClose={() =>
+          setAllVenuesOpen(false)
+        }
       />
 
 

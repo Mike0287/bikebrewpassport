@@ -8,7 +8,7 @@ import {
 } from "react-leaflet";
 
 import L from "leaflet";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import type { Venue } from "../hooks/useVenues";
 
@@ -56,7 +56,6 @@ const unvisitedIcon = new L.Icon({
 });
 
 
-
 const visitedIcon = new L.Icon({
 
   iconUrl: markVisited,
@@ -70,7 +69,6 @@ const visitedIcon = new L.Icon({
 });
 
 
-
 const nextStopIcon = new L.Icon({
 
   iconUrl: markRecommended,
@@ -80,6 +78,46 @@ const nextStopIcon = new L.Icon({
   iconAnchor: [32, 65],
 
   popupAnchor: [0, -55],
+
+});
+
+
+
+const mobileUnvisitedIcon = new L.Icon({
+
+  iconUrl: markUnvisited,
+
+  iconSize: [32, 32],
+
+  iconAnchor: [16, 32],
+
+  popupAnchor: [0, -30],
+
+});
+
+
+const mobileVisitedIcon = new L.Icon({
+
+  iconUrl: markVisited,
+
+  iconSize: [32, 32],
+
+  iconAnchor: [16, 32],
+
+  popupAnchor: [0, -30],
+
+});
+
+
+const mobileNextStopIcon = new L.Icon({
+
+  iconUrl: markRecommended,
+
+  iconSize: [42, 42],
+
+  iconAnchor: [21, 42],
+
+  popupAnchor: [0, -38],
 
 });
 
@@ -147,168 +185,217 @@ export default function MapView({
 }: MapProps) {
 
 
-return (
+  const [isMobile, setIsMobile] =
+    useState(false);
 
-<div className="map-container">
 
+  useEffect(() => {
 
-<MapContainer
+    function checkMobile() {
 
-  center={[52.5, -1.5]}
+      setIsMobile(
+        window.innerWidth <= 700
+      );
 
-  zoom={7}
+    }
 
-  style={{
-    height:"100vh",
-    width:"100%"
-  }}
 
->
+    checkMobile();
 
 
-<MapController
-  nextStop={nextStop}
-  location={location}
-/>
+    window.addEventListener(
+      "resize",
+      checkMobile
+    );
 
 
-<MapResetController
-  resetMap={resetMap}
-  venues={venues}
-/>
+    return () =>
+      window.removeEventListener(
+        "resize",
+        checkMobile
+      );
 
+  }, []);
 
 
-<TileLayer
 
-  url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+  return (
 
-  attribution="&copy; OpenStreetMap contributors"
+    <div className="map-container">
 
-/>
 
+      <MapContainer
 
+        center={[52.5, -1.5]}
 
-{location && (
+        zoom={7}
 
-  <LocationMarker location={location} />
+        style={{
+          height:"100vh",
+          width:"100%"
+        }}
 
-)}
+      >
 
 
+        <MapController
+          nextStop={nextStop}
+          location={location}
+        />
 
-{location && nextStop && (
 
-<Polyline
+        <MapResetController
+          resetMap={resetMap}
+          venues={venues}
+        />
 
-  positions={[
-    [
-      location.lat,
-      location.lng
-    ],
-    [
-      nextStop.Latitude,
-      nextStop.Longitude
-    ]
-  ]}
 
-  color="#000000"
 
-  weight={4}
+        <TileLayer
 
-  opacity={0.8}
+          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
 
-  dashArray="10,10"
+          attribution="&copy; OpenStreetMap contributors"
 
-/>
+        />
 
-)}
 
 
+        {location && (
 
+          <LocationMarker location={location} />
 
-{nextStop && (
+        )}
 
-<Marker
 
-  position={[
-    nextStop.Latitude,
-    nextStop.Longitude
-  ]}
 
-  icon={nextStopIcon}
+        {location && nextStop && (
 
->
+          <Polyline
 
+            positions={[
+              [
+                location.lat,
+                location.lng
+              ],
+              [
+                nextStop.Latitude,
+                nextStop.Longitude
+              ]
+            ]}
 
-<Popup>
+            color="#000000"
 
-<VenueCard
-  venue={nextStop}
-  visited={visited.includes(nextStop.Stamp)}
-  toggleVisited={toggleVisited}
-  recommended
-/>
+            weight={4}
 
-</Popup>
+            opacity={0.8}
 
+            dashArray="10,10"
 
-</Marker>
+          />
 
-)}
+        )}
 
 
 
 
 
-{venues
 
-.filter(
-  (venue) =>
-    !nextStop ||
-    venue.Stamp !== nextStop.Stamp
-)
+        {nextStop && (
 
-.map((venue)=>(
+          <Marker
 
-<Marker
+            position={[
+              nextStop.Latitude,
+              nextStop.Longitude
+            ]}
 
-key={venue.Stamp}
+            icon={
+              isMobile
+                ? mobileNextStopIcon
+                : nextStopIcon
+            }
 
-position={[
-  venue.Latitude,
-  venue.Longitude
-]}
+          >
 
-icon={
-  visited.includes(venue.Stamp)
-    ? visitedIcon
-    : unvisitedIcon
-}
 
->
+            <Popup>
 
+              <VenueCard
+                venue={nextStop}
+                visited={visited.includes(nextStop.Stamp)}
+                toggleVisited={toggleVisited}
+                recommended
+              />
 
-<Popup>
+            </Popup>
 
-<VenueCard
-  venue={venue}
-  visited={visited.includes(venue.Stamp)}
-  toggleVisited={toggleVisited}
-/>
 
-</Popup>
+          </Marker>
 
+        )}
 
-</Marker>
 
-))}
 
 
-</MapContainer>
 
-</div>
 
-);
+        {venues
+
+          .filter(
+            (venue) =>
+              !nextStop ||
+              venue.Stamp !== nextStop.Stamp
+          )
+
+          .map((venue)=>(
+
+            <Marker
+
+              key={venue.Stamp}
+
+              position={[
+                venue.Latitude,
+                venue.Longitude
+              ]}
+
+              icon={
+                visited.includes(venue.Stamp)
+                  ? (
+                      isMobile
+                        ? mobileVisitedIcon
+                        : visitedIcon
+                    )
+                  : (
+                      isMobile
+                        ? mobileUnvisitedIcon
+                        : unvisitedIcon
+                    )
+              }
+
+            >
+
+
+              <Popup>
+
+                <VenueCard
+                  venue={venue}
+                  visited={visited.includes(venue.Stamp)}
+                  toggleVisited={toggleVisited}
+                />
+
+              </Popup>
+
+
+            </Marker>
+
+          ))}
+
+
+      </MapContainer>
+
+    </div>
+
+  );
 
 }
